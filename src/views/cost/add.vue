@@ -1,33 +1,33 @@
 <template>
-  <div class="add">
-    <van-form @submit="onSubmit">
-      <!-- 一级类型 -->
-      <van-field readonly clickable label="类型" :value="type" placeholder="选择类型" @click="showPicker = true" />
-      <van-popup v-model="showPicker" round position="bottom">
-        <van-picker
-          show-toolbar
-          :columns="columns"
-          @cancel="showPicker = false"
-          @confirm="typeConfirm"
-        />
-      </van-popup>
-      <!-- 二级类型 -->
-      <van-field readonly clickable label="子类型" :value="type2" placeholder="选择类型" @click="showPicker2 = true" />
-      <van-popup v-model="showPicker2" round position="bottom">
-        <van-picker
-          show-toolbar
-          :columns="columns2"
-          @cancel="showPicker2 = false"
-          @confirm="type2Confirm"
-        />
-      </van-popup>
+  <div class="add w-all">
+    <van-form @submit="onSubmit" class="w-all">
+
+      <van-field name="add-o" label="添加新花销">
+        <template #input>
+          <van-icon name="add-o" color="#1989fa" @click="countAdd"/>
+        </template>
+      </van-field>
+
+      <!-- 添加类型 -->
+      <div v-for="(item, index) in costDetail">
+        <van-field readonly clickable label="类型" :value="item.type1+ '_' +item.type2" placeholder="选择类型" @click="showPicker = true" />
+        <van-popup v-model="showPicker" round position="bottom">
+          <van-picker
+                  show-toolbar
+                  :columns="costType"
+                  @cancel="showPicker = false"
+                  @confirm="typeConfirm(index, $event)"
+          />
+        </van-popup>
+        <!-- 费用金额 -->
+        <van-field v-model="item.price" type="number" label="金额" />
+      </div>
       <!-- 选择日期 -->
       <van-field readonly clickable name="calendar" :value="nowDate" label="日期" placeholder="点击选择日期" @click="showCalendar = true" />
       <van-calendar v-model="showCalendar" @confirm="dateConfirm" />
-      <!-- 费用金额 -->
-      <van-field v-model="money" type="number" label="金额" />
+
       <!-- 详情描述 -->
-      <van-field v-model="detail" rows="1" autosize label="费用描述" type="textarea" placeholder="请输入费用描述" />
+      <van-field v-model="description" rows="1" autosize label="费用描述" type="textarea" placeholder="请输入费用描述" />
       <!-- 提价 -->
       <div style="margin: 16px;margin-top:300px;">
         <van-button round block type="info" native-type="submit">提交</van-button>
@@ -38,7 +38,10 @@
 
 <script lang="ts">
 import { Component, Emit, Vue } from 'vue-property-decorator';
-import { Form, Picker, Field, Popup, Calendar, Button, Dialog } from 'vant';
+import { Form, Picker, Field, Popup, Calendar, Button, Dialog, Icon } from 'vant';
+const costType = require("@/assets/js/costType");
+import fetch from '@/utils/fetch';
+
 
 @Component({
   components: {
@@ -48,28 +51,31 @@ import { Form, Picker, Field, Popup, Calendar, Button, Dialog } from 'vant';
     [Form.name]: Form,
     [Button.name]: Button,
     [Calendar.name]: Calendar,
-
+    [Icon.name]: Icon
   },
 })
 export default class Add extends Vue {
-  private type: string = ''
-  private showPicker: boolean = false
-  private columns: Array<string> = ['必销', '买乐', '提升']
+  //data；
 
-  private type2: string = ''
-  private showPicker2: boolean = false
-  private columns2: Array<string> = ['房租', '差旅', '食宿', '衣装', '养老', '保障']
+  private costDetail: Array<object> = [{type1: costType[0]['text'], type2: costType[0]['children'][0]['text'], price: 0}]
+  private showPicker: boolean = false
+  private costType: Array<object> = costType
+
+
 
   private nowDate: any = Date.now() || new Date()
   private showCalendar: boolean = false
 
-  private money: number = 0
-  private detail: string = ''
+  private description: string = ''
 
+  //methods；
   @Emit()
-  typeConfirm(type: string): void{
+  typeConfirm(index: number, type: Array<string>): void{
+    console.log(type)
     this.showPicker = false;
-    this.type = type;
+    this.costDetail[index]['type1'] = type[0];
+    this.costDetail[index]['type2'] = type[1];
+    console.log(this.costDetail)
   }
 
   @Emit()
@@ -85,9 +91,9 @@ export default class Add extends Vue {
   }
   
   @Emit()
-  type2Confirm(type2: string): void{
-    this.showPicker2 = false;
-    this.type2 = type2;
+  countAdd(): void{
+    const obj: object = {type1: costType[0]['text'], type2: costType[0]['children'][0]['text'], price: 0};
+    this.costDetail.push(obj);
   }
 
   @Emit()
@@ -99,8 +105,23 @@ export default class Add extends Vue {
   
   @Emit()
   insertCost(): void{
+    const costData: object = {
+      costDetail: this.costDetail,
+      description: this.description,
+      date: this.nowDate
+    }
     // 调用保存接口；
-    this.$router.push('/')
+    console.log(costData)
+    fetch.insert(costData).then((res) => {
+
+    })
+    // this.$router.push('/')
   }
 }
 </script>
+
+<style>
+  .van-field {
+    width: 100%;
+  }
+</style>

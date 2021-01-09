@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-all">
     <router-view/>
     <van-tabbar route>
-      <van-tabbar-item to="/" icon="home-o">首页</van-tabbar-item>
+      <van-tabbar-item to="/add" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="/cost" icon="search">花销</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -35,16 +35,5 @@ export default class App extends Vue{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

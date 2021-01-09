@@ -70,9 +70,9 @@ export default class Cost extends Vue {
         label: function label(text, index, total) {
           const textCfg = {};
           if (index === 0) {
-            textCfg.textAlign = 'left';
+            // textCfg.textAlign = 'left';
           } else if (index === total - 1) {
-            textCfg.textAlign = 'right';
+            // textCfg.textAlign = 'right';
           }
           return textCfg;
         }
@@ -148,8 +148,8 @@ export default class Cost extends Vue {
         onClick: function onClick(ev) {
           const data = ev.data;
           if (data) {
-            _this.$el.querySelector("#title").innerHTML = data.type;
-            _this.$el.querySelector("#money").innerText = data.money;
+            // _this.$el.querySelector("#title").innerHTML = data.type;
+            // _this.$el.querySelector("#money").innerText = data.money;
           }
         }
       });
@@ -157,3 +157,7 @@ export default class Cost extends Vue {
     }
 }
 </script>
+
+<style>
+
+</style>
