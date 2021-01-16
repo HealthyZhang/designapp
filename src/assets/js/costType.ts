@@ -1,4 +1,4 @@
-const costType = [
+const costType:Array<object> = [
     {
         text: '必销',
         children: [

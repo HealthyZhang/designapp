@@ -9,7 +9,7 @@ const instance = axios.create({
         // 'Accept': '*',
         // 'Content-Type': 'application/json',
         // 'Access-Control-Allow-Origin': '*',
-        'X-Requested-With': 'XMLHttpRequest',
+        // 'X-Requested-With': 'XMLHttpRequest',
         // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         //'scriptCharset': 'utf-8',
         // 'Authorization': 'Bearer '+localStorage.getItem("token")
@@ -21,7 +21,8 @@ const fetch = (url:string = '', params:object = {}, option:object = {}) => {
     if(!url) {
         return Promise.reject(`params 'url' not exist！`)
     }
-    let method:string = option.method || 'post'
+    // let method = option.method || 'post'
+    let method = 'post'
     switch(method) {
         case 'get':
             return instance.get(url, {
@@ -37,7 +38,7 @@ const fetch = (url:string = '', params:object = {}, option:object = {}) => {
     }
 }
 export default {
-    async insert(params: object) {
-        return await fetch('api', params, {method: 'post'})
+    async insert(params:object) {
+        return await fetch('http://127.0.0.1:2691/insertCost', params, {method: 'post'})
     },
 }

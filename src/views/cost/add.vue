@@ -40,7 +40,7 @@
 import { Component, Emit, Vue } from 'vue-property-decorator';
 import { Form, Picker, Field, Popup, Calendar, Button, Dialog, Icon } from 'vant';
 const costType = require("@/assets/js/costType");
-import fetch from '@/utils/fetch';
+import fetch from "@/utils/fetch";
 
 
 @Component({
@@ -57,7 +57,7 @@ import fetch from '@/utils/fetch';
 export default class Add extends Vue {
   //data；
 
-  private costDetail: Array<object> = [{type1: costType[0]['text'], type2: costType[0]['children'][0]['text'], price: 0}]
+  private costDetail: Array<any> = [{type1: costType[0]['text'], type2: costType[0]['children'][0]['text'], price: 0}]
   private showPicker: boolean = false
   private costType: Array<object> = costType
 
@@ -112,9 +112,7 @@ export default class Add extends Vue {
     }
     // 调用保存接口；
     console.log(costData)
-    fetch.insert(costData).then((res) => {
-
-    })
+    fetch.insert(costData)
     // this.$router.push('/')
   }
 }
